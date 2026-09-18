@@ -9,13 +9,14 @@ on:
     branches:
       - main
 
+  workflow_dispatch:
+
 jobs:
 
   test:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -33,13 +34,24 @@ jobs:
         run: |
           python -m pytest -v
 
-  deploy:
+  build:
     needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -t simple-python-ci .
+
+  deploy:
+    needs: build
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Deploy application
+      - name: Deploy
         run: |
           echo "Deploying application..."
