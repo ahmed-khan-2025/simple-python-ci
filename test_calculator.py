@@ -2,7 +2,7 @@ from calculator import add, subtract, multiply, divide
 
 
 def test_add():
-    assert add(2, 5) == 7
+    assert add(1, 5) == 6
 
 
 def test_subtract():
